@@ -1,13 +1,15 @@
 module.exports = {
   siteMetadata: {
     title: "FireQQTW",
+    siteUrl: "https://needstobetheproductionurl.com"
   },
+  pathPrefix: "/fireqq-blog",
   plugins: [
     "gatsby-plugin-sass",
     {
       resolve: "gatsby-plugin-google-analytics",
       options: {
-        trackingId: "55667788",
+        trackingId: "UA-121245102-1",
       },
     },
     "gatsby-plugin-sharp",
