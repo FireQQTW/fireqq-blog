@@ -27,7 +27,7 @@ workbox.core.clientsClaim();
  */
 self.__precacheManifest = [
   {
-    "url": "webpack-runtime-bfde441c6e3a30959bf1.js"
+    "url": "webpack-runtime-23c1656451e243f299c2.js"
   },
   {
     "url": "styles.08b6f1b92a40a3f4c705.css"
@@ -36,23 +36,20 @@ self.__precacheManifest = [
     "url": "styles-407fe62976dc5310c43e.js"
   },
   {
-    "url": "framework-55f7b2ba736e89fdc740.js"
-  },
-  {
-    "url": "532a2f07-549094fa347c85980056.js"
+    "url": "framework-fc1db31f678bd7aa66d8.js"
   },
   {
     "url": "dc6a8720040df98778fe970bf6c000a41750d3ae-ba1efdd9433c01d54088.js"
   },
   {
-    "url": "app-1102477e670b1ebc4041.js"
+    "url": "app-b5bff407a1469dfc49ca.js"
   },
   {
     "url": "offline-plugin-app-shell-fallback/index.html",
-    "revision": "114dc39c0ff73ae1687fb241e54b44b2"
+    "revision": "19f2fede595b7a26bab3829558fdbe00"
   },
   {
-    "url": "component---cache-caches-gatsby-plugin-offline-app-shell-js-fd4fb51a6fac1c18bdde.js"
+    "url": "component---cache-caches-gatsby-plugin-offline-app-shell-js-241020a1cf7d0f317bbe.js"
   },
   {
     "url": "page-data/offline-plugin-app-shell-fallback/page-data.json",
@@ -60,18 +57,14 @@ self.__precacheManifest = [
   },
   {
     "url": "page-data/app-data.json",
-    "revision": "bc2cc68277d8ae69669516fbb5b39ef7"
+    "revision": "532b291cc59d04cfe97b909a3b4ecbd2"
   },
   {
-    "url": "polyfill-67b4f4efb3365fcb72ee.js"
-  },
-  {
-    "url": "manifest.json",
-    "revision": "525f8fdc673f544887998e2e653a54c5"
+    "url": "polyfill-e57283ee73c4abc30069.js"
   },
   {
     "url": "manifest.webmanifest",
-    "revision": "cb8ae41e919b2e335945b227c4f7f1b3"
+    "revision": "7414bc1c182e42359d3d65ed4ca38564"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
@@ -163,7 +156,7 @@ const navigationRoute = new NavigationRoute(async ({ event }) => {
   // Check for resources + the app bundle
   // The latter may not exist if the SW is updating to a new version
   const resources = await idbKeyval.get(`resources:${pathname}`)
-  if (!resources || !(await caches.match(`/fireqq-blog/app-1102477e670b1ebc4041.js`))) {
+  if (!resources || !(await caches.match(`/fireqq-blog/app-b5bff407a1469dfc49ca.js`))) {
     return await fetch(event.request)
   }
 
