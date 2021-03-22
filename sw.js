@@ -27,7 +27,7 @@ workbox.core.clientsClaim();
  */
 self.__precacheManifest = [
   {
-    "url": "webpack-runtime-23c1656451e243f299c2.js"
+    "url": "webpack-runtime-3452b08b2209afebcaee.js"
   },
   {
     "url": "styles.08b6f1b92a40a3f4c705.css"
@@ -42,29 +42,21 @@ self.__precacheManifest = [
     "url": "dc6a8720040df98778fe970bf6c000a41750d3ae-ba1efdd9433c01d54088.js"
   },
   {
-    "url": "app-b5bff407a1469dfc49ca.js"
+    "url": "app-3e4fee11a1186950c96d.js"
   },
   {
     "url": "offline-plugin-app-shell-fallback/index.html",
-    "revision": "19f2fede595b7a26bab3829558fdbe00"
+    "revision": "34fa0f37df91b23ca6fb86678d5c463e"
   },
   {
     "url": "component---cache-caches-gatsby-plugin-offline-app-shell-js-241020a1cf7d0f317bbe.js"
-  },
-  {
-    "url": "page-data/offline-plugin-app-shell-fallback/page-data.json",
-    "revision": "f6081b83111aea4128c98944b7fafccc"
-  },
-  {
-    "url": "page-data/app-data.json",
-    "revision": "532b291cc59d04cfe97b909a3b4ecbd2"
   },
   {
     "url": "polyfill-e57283ee73c4abc30069.js"
   },
   {
     "url": "manifest.webmanifest",
-    "revision": "7414bc1c182e42359d3d65ed4ca38564"
+    "revision": "cb6e4bee0bcfdbc49474b05801dcfc42"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
@@ -151,12 +143,12 @@ const navigationRoute = new NavigationRoute(async ({ event }) => {
   lastNavigationRequest = event.request.url
 
   let { pathname } = new URL(event.request.url)
-  pathname = pathname.replace(new RegExp(`^/fireqq-blog`), ``)
+  pathname = pathname.replace(new RegExp(`^`), ``)
 
   // Check for resources + the app bundle
   // The latter may not exist if the SW is updating to a new version
   const resources = await idbKeyval.get(`resources:${pathname}`)
-  if (!resources || !(await caches.match(`/fireqq-blog/app-b5bff407a1469dfc49ca.js`))) {
+  if (!resources || !(await caches.match(`/app-3e4fee11a1186950c96d.js`))) {
     return await fetch(event.request)
   }
 
@@ -169,7 +161,7 @@ const navigationRoute = new NavigationRoute(async ({ event }) => {
     }
   }
 
-  const offlineShell = `/fireqq-blog/offline-plugin-app-shell-fallback/index.html`
+  const offlineShell = `/offline-plugin-app-shell-fallback/index.html`
   const offlineShellWithKey = workbox.precaching.getCacheKeyForURL(offlineShell)
   return await caches.match(offlineShellWithKey)
 })
