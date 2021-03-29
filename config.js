@@ -1,13 +1,13 @@
 'use strict';
 
 module.exports = {
-  // url: 'https://lumen.netlify.com',
-  pathPrefix: '/fireqq-blog',
-  title: 'Blog by John Doe',
-  subtitle: 'Pellentesque odio nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu.',
+  url: 'https://blog.fireqqtw.me',
+  pathPrefix: '/',
+  title: 'QA-客家碼農',
+  subtitle: '程式碼，生活。',
   copyright: '© All rights reserved.',
-  disqusShortname: '',
-  postsPerPage: 4,
+  disqusShortname: 'myblog-cddxkaoayz',
+  postsPerPage: 10,
   googleAnalyticsId: 'UA-121245102-1',
   useKatex: false,
   menu: [
@@ -25,19 +25,19 @@ module.exports = {
     }
   ],
   author: {
-    name: 'John Doe',
+    name: 'TSUNG-HSUAN LIU(Q)',
     photo: '/photo.jpg',
-    bio: 'Pellentesque odio nisi, euismod in, pharetra a, ultricies in, diam. Sed arcu.',
+    bio: '客家碼農，連字都要省。',
     contacts: {
-      email: '',
-      facebook: '#',
-      telegram: '#',
-      twitter: '#',
-      github: '#',
+      email: 'azraelxuan927@gmail.com',
+      facebook: 'azraelxuan927',
+      telegram: 'qqXuan',
+      twitter: '',
+      github: 'FireQQTW',
       rss: '',
       vkontakte: '',
-      linkedin: '#',
-      instagram: '#',
+      linkedin: 'tsung-hsuan-liu-08a17371',
+      instagram: 'azrael927',
       line: '',
       gitlab: '',
       weibo: '',

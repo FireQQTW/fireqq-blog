@@ -5,13 +5,14 @@ import styles from './Author.module.scss';
 import { useSiteMetadata } from '../../../hooks';
 
 const Author = () => {
-  const { author } = useSiteMetadata();
+  const { author, twitter } = useSiteMetadata();
+  const showTwittwer = twitter ? true : false;
 
   return (
     <div className={styles['author']}>
       <p className={styles['author__bio']}>
         {author.bio}
-        <a
+        {showTwittwer && <a
           className={styles['author__bio-twitter']}
           href={getContactHref('twitter', author.contacts.twitter)}
           rel="noopener noreferrer"
@@ -19,6 +20,7 @@ const Author = () => {
         >
           <strong>{author.name}</strong> on Twitter
         </a>
+        }
       </p>
     </div>
   );
