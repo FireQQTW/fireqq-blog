@@ -58,8 +58,8 @@ module.exports = {
           }
         `,
         feeds: [{
-          serialize: ({ query: { site, allMarkdownRemark } }) => (
-            allMarkdownRemark.edges.map((edge) => ({
+          serialize: ({ query: { site, allMdx } }) => (
+            allMdx.edges.map((edge) => ({
               ...edge.node.frontmatter,
               description: edge.node.frontmatter.description,
               date: edge.node.frontmatter.date,
@@ -70,14 +70,14 @@ module.exports = {
           ),
           query: `
               {
-                allMarkdownRemark(
+                allMdx(
                   limit: 1000,
                   sort: { order: DESC, fields: [frontmatter___date] },
                   filter: { frontmatter: { template: { eq: "post" }, draft: { ne: true } } }
                 ) {
                   edges {
                     node {
-                      html
+                      body
                       fields {
                         slug
                       }
@@ -99,9 +99,14 @@ module.exports = {
       }
     },
     {
-      resolve: 'gatsby-transformer-remark',
+      resolve: 'gatsby-plugin-mdx',
       options: {
-        plugins: [
+        extensions: [`.md`, `.mdx`],
+        remarkPlugins: [
+          require(`remark-math`),
+          require(`remark-html-katex`)
+        ],
+        gatsbyRemarkPlugins: [
           'gatsby-remark-relative-images',
           {
             resolve: 'gatsby-remark-katex',
@@ -121,7 +126,13 @@ module.exports = {
             options: { wrapperStyle: 'margin-bottom: 1.0725rem' }
           },
           'gatsby-remark-autolink-headers',
-          'gatsby-remark-prismjs',
+          {
+            resolve: `gatsby-remark-highlight-code`,
+          },
+          // 'gatsby-remark-prismjs',
+          {
+            resolve: `gatsby-remark-prismjs`,
+          },
           'gatsby-remark-copy-linked-files',
           'gatsby-remark-smartypants',
           'gatsby-remark-external-links'

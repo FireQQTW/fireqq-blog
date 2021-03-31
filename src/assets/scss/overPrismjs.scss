@@ -1,0 +1,7 @@
+@charset "UTF-8";
+
+:not(pre) > code[class*="language-"] {
+  padding: .3em .5em .2em;
+  font-weight: bold;
+  box-shadow: var(--deckgo-highlight-code-carbon-box-shadow, rgba(0, 0, 0, 0.3) 0 1px 10px);
+}
