@@ -65,13 +65,41 @@
     }
 
     &-readmore {
-      font-size: $typographic-base-font-size;
-      color: $color-primary;
+      background: white;
+      color: #565656;
+      border: $measurement solid #565656;
+      cursor: pointer;
+      font: 600 0.85rem/1.25 'Montserrat', sans-serif;
+      letter-spacing: $measurement;
+      margin: 0.5rem;
+      padding: 0.5em 0.75em;
+      position: relative;
+      text-transform: uppercase;
 
-      &:hover,
-      &:focus {
-        color: $color-primary;
-        border-bottom: 1px solid $color-primary;
+      &:hover {
+        color: #565656;
+      }
+
+      &:after {
+        content: '';
+        position: absolute;
+        transition: all 0.125s ease-in-out;
+        border: $measurement dashed #565656;
+      }
+
+      &:after {
+        bottom: $measurement * -1;
+        left: $measurement * -1;
+        right: $measurement * -1;
+        top: $measurement * -1;
+      }
+
+      &:hover:after,
+      &:focus:after {
+        bottom: $measurement;
+        left: $measurement;
+        right: $measurement;
+        top: $measurement;
       }
 
     }

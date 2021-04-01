@@ -4,6 +4,7 @@ import { Link } from 'gatsby';
 import Author from './Author';
 import Comments from './Comments';
 import Content from './Content';
+import {Helmet} from "react-helmet";
 import Meta from './Meta';
 import Tags from './Tags';
 import styles from './Post.module.scss';
@@ -20,7 +21,10 @@ const Post = ({ post }: Props) => {
 
   return (
     <div className={styles['post']}>
-      <Link className={styles['post__home-button']} to="/">All Articles</Link>
+      <Helmet>
+          <meta name="description" content={post.frontmatter.description} />
+      </Helmet>
+      <Link className={styles['post__home-button']} to="/">首頁</Link>
 
       <div className={styles['post__content']}>
         <Content body={body} title={title} />
