@@ -12,7 +12,7 @@ module.exports = {
   },
   testPathIgnorePatterns: ['node_modules', '.cache', 'public'],
   transformIgnorePatterns: [
-    'node_modules/(?!(gatsby)/)'
+    'node_modules/(?!(gatsby|gatsby-plugin-mdx)/)'
   ],
   globals: {
     __PATH_PREFIX__: '',

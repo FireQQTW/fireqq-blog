@@ -4,6 +4,7 @@ import renderer from 'react-test-renderer';
 import { useStaticQuery, StaticQuery } from 'gatsby';
 import Post from './Post';
 import siteMetadata from '../../../jest/__fixtures__/site-metadata';
+import markdownRemark from '../../../jest/__fixtures__/markdown-remark';
 import type { RenderCallback } from '../../types';
 
 describe('Post', () => {
@@ -18,8 +19,8 @@ describe('Post', () => {
 
   const props = {
     post: {
-      id: 'test-123',
-      html: '<p>test</p>',
+      id: markdownRemark.mdx.id,
+      body: markdownRemark.mdx.body,
       fields: {
         slug: '/test',
         categorySlug: '/test-category',
