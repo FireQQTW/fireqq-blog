@@ -71,7 +71,7 @@ yarn config list
 
 我的 .npmrc 檔
 
-```bash
+```shell
 ## /Users/liuqq/.npmrc
 //npm.pkg.github.com/:_authToken=<你的 GITHUB_PAT_TOKEN>
 //npm.pkg.github.com/fireqq/:_authToken=<你的 GITHUB_PAT_TOKEN>
@@ -103,7 +103,7 @@ yarn config list
 
 ### *任務二: 要在 my-app 其他專案安裝 @fireqq/test-publish
 
-```bash
+```shell
 npm i @fireqq/test-publish -D
 # or 
 yarn add @fireqq/test-publish -D
@@ -111,13 +111,13 @@ yarn add @fireqq/test-publish -D
 
 如果你的`.npmrc`裡面有下列是可以順利安裝完成的
 
-```bash
+```shell
 @fireqq:registry=https://npm.pkg.github.com/fireqq
 ```
 
 但因為 package 是 private 的情形，所以需要帶 token 去做認證，缺少不了下面這一行：
 
-```bash
+```shell
 //npm.pkg.github.com/:_authToken=<你的 GITHUB_PAT_TOKEN>
 ```
 
@@ -125,7 +125,7 @@ yarn add @fireqq/test-publish -D
 
 後來就開始各種亂試，發現居然是超怪的方式成功....
 
-```bash
+```shell
 ## 原本 .npmrc 內的 token 認證
 //npm.pkg.github.com/:_authToken=<你的 GITHUB_PAT_TOKEN>
 
