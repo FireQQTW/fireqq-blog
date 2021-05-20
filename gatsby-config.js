@@ -107,6 +107,9 @@ module.exports = {
           require(`remark-html-katex`)
         ],
         gatsbyRemarkPlugins: [
+          {
+            resolve: `gatsby-remark-highlight-code`,
+          },
           'gatsby-remark-relative-images',
           {
             resolve: 'gatsby-remark-katex',
@@ -126,10 +129,6 @@ module.exports = {
             options: { wrapperStyle: 'margin-bottom: 1.0725rem' }
           },
           'gatsby-remark-autolink-headers',
-          {
-            resolve: `gatsby-remark-highlight-code`,
-          },
-          // 'gatsby-remark-prismjs',
           {
             resolve: `gatsby-remark-prismjs`,
           },

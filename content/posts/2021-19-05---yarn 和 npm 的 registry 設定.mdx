@@ -1,0 +1,167 @@
+---
+title: yarn 和 npm 的 registry 設定
+date: "2021-05-19T00:00:00.000Z"
+template: "post"
+slug: "yarn-and-npm-registry-setting"
+category: "F2E"
+tags:
+  - "javascript"
+description: "Yarn 和 npm 的 registry 設定"
+socialImage: ""
+---
+
+## 我要 publish packages 到 Github packages 上
+
+因為公司是使用 Github 做 Git 管理，就要設定對應的 **registry** 和 **@Owner**，這可真的搞死我一段時間，照理來說，yarn 應該要可以讀得到 .npmrc 才對，但事情好像不是這樣，我就紀錄一下自己發現的問題。
+
+**相關文檔：**
+
+* [github - publishing-nodejs-packages](https://docs.github.com/en/actions/guides/publishing-nodejs-packages)
+
+## 查 yarn 和 npm 設定
+
+我們可以透過 yarn 和 npm 的指令去查目前吃到的設定檔。
+
+### Yarn
+
+```shell
+yarn config list
+```
+
+### npm
+
+```shell
+> npm config list
+```
+
+yarn 或 npm 跑出來的資訊大致上差不多，說明如下：
+```shell
+# 根目錄下的 .npmrc
+; "user" config from /Users/liuqq/.npmrc
+
+## 這行是來自專案目錄下的覆蓋
+; @fireqqtw:registry = "https://npm.pkg.github.com/fireqqtw" ; overridden by project
+## Github packages 下的 module 用這個 auth_token (Github PAT)
+//npm.pkg.github.com/:_authToken =<你的 GITHUB_PAT_TOKEN>
+## 在 Github packages 的 @fireqqtw_project 下的 module 用這個 auth_token (Github PAT)
+//npm.pkg.github.com/fireqqtw_project/:_authToken =<你的 GITHUB_PAT_TOKEN>
+## npm packages 下安裝的用這個 token
+//registry.npmjs.org/:_authToken =<你的 NPM_PAT_TOKEN>
+
+
+# 專案目錄下的 .npmrc
+; "project" config from /Users/liuqq/project/test-cmd/.npmrc
+
+## 指定 @fireqqtw 組織下的 module 用這個 registry 去安裝
+@fireqqtw:registry = "https://npm.pkg.github.com/fireqqtw"
+## 指定 @fireqqtw_project 組織下的 module 用這個 registry 去安裝
+@fireqqtw_project:registry = "https://npm.pkg.github.com/fireqqtw_project"
+```
+
+## 我要怎麼應用？
+
+下面示範的情境，會是公司內部有自己的 organization，有自己發布的 packages 要讓公司內部專案交叉使用，非 public packages 的情況。
+
+```
+模組專案: test-publish
+帳號: fireqq
+
+引用專案: my-app
+```
+
+我的 .npmrc 檔
+
+```bash
+## /Users/liuqq/.npmrc
+//npm.pkg.github.com/:_authToken=<你的 GITHUB_PAT_TOKEN>
+//npm.pkg.github.com/fireqq/:_authToken=<你的 GITHUB_PAT_TOKEN>
+//registry.npmjs.org/:_authToken=<你的 NPM_PAT_TOKEN>
+@fireqq:registry=https://npm.pkg.github.com/fireqq
+
+
+## /Users/liuqq/project/test-publish/.npmrc
+
+## /Users/liuqq/project/my-app/.npmrc
+@fireqq:registry=https://npm.pkg.github.com/fireqq
+
+```
+
+### *任務一: 要在 Github 上 publish 一個 package*
+
+  你希望產生 `@fireqq/test-publish` 的 module，你需要哪些設定？
+
+  ```shell
+  # .npmrc
+  @fireqq:registry="https://npm.pkg.github.com/fireqq"
+  //npm.pkg.github.com/:_authToken=<你的 GITHUB_PAT_TOKEN>
+  #or
+  @fireqq:registry="https://npm.pkg.github.com/"
+  //npm.pkg.github.com/:_authToken=<你的 GITHUB_PAT_TOKEN>
+
+  ### 這邊是指當 yarn(npm) 在安裝 npm module 名稱是 `@fireqq/**`開頭時，請使用 github packages 安裝，並指定 npm.pkg.github.com 登入使用 <你的 GITHUB_PAT_TOKEN> 這個 TOKEN 來做登入。
+  ```
+
+### *任務二: 要在 my-app 其他專案安裝 @fireqq/test-publish
+
+```bash
+npm i @fireqq/test-publish -D
+# or 
+yarn add @fireqq/test-publish -D
+```
+
+如果你的`.npmrc`裡面有下列是可以順利安裝完成的
+
+```bash
+@fireqq:registry=https://npm.pkg.github.com/fireqq
+```
+
+但因為 package 是 private 的情形，所以需要帶 token 去做認證，缺少不了下面這一行：
+
+```bash
+//npm.pkg.github.com/:_authToken=<你的 GITHUB_PAT_TOKEN>
+```
+
+在用 npm 安裝時可以順利吃到設定，但是用 yarn 就出問題了!!! 他會狂噴401認證錯誤，我整個就是黑人問號？
+
+後來就開始各種亂試，發現居然是超怪的方式成功....
+
+```bash
+## 原本 .npmrc 內的 token 認證
+//npm.pkg.github.com/:_authToken=<你的 GITHUB_PAT_TOKEN>
+
+## 要讓 yarn 可以使用
+//npm.pkg.github.com/:_authToken=<你的 GITHUB_PAT_TOKEN>
+//npm.pkg.github.com/test-publish/:_authToken=<你的 GITHUB_PAT_TOKEN>
+## 'npm.pkg.github.com/test-publish:_authToken=<你的 GITHUB_PAT_TOKEN>' yarn 還抓不到
+
+## 所以後來看到一種很奇耙的寫法
+//npm.pkg.github.com:_authToken=<你的 GITHUB_PAT_TOKEN>
+//npm.pkg.github.com/:_authToken=<你的 GITHUB_PAT_TOKEN>
+//npm.pkg.github.com/test-publish:_authToken=<你的 GITHUB_PAT_TOKEN>
+//npm.pkg.github.com/test-publish/:_authToken=<你的 GITHUB_PAT_TOKEN>
+
+## 就只差在一個 / .....
+```
+
+其實這邊我也被搞得很亂，有錯再跟我說，我就先紀錄一下，因為我要用 lerna 去做 modules 管理，如果用 npm 的話，會造成我們的 node_modules 沒辦法 reuse，讓每個模組底下都有 node_modules，很吃記憶體空間，官方也是推薦使用 yarn 當 npmClient。
+
+# 需要避開的問題
+
+  1. ### <你的 GITHUB_PAT_TOKEN> 的管理政策需小心
+  因為這個 TOKEN 是代表某種權限，如果說你的 PAT TOKEN 是權限很大的 TOKEN，那你又把他寫在 code 裏面，也就是只要拿到 code 的人，就可以拿到你的 TOKEN，可以這個權限很大的  TOKEN 做很多壞壞的事情。
+
+  所以 TOKEN 管理權限就必須分割好，用一個專門只有 READ 權限的 TOKEN，這樣就算被拿到了，他最多就是只有讀取的權限，不會把你的東西做修改、刪除或轉移之類的事情。
+
+  那如果你這專案是有 publish 權限的需求，那另一個作法則是可將 TOKEN 放到平台的設定裡面，透過 CI/CD 去讀取，這樣避免了 TOKEN 存放在 code 裏面，TOKEN 的設定同時也自動化，統一由專案的管理者去管理。
+
+# 參考的文件
+
+* [yarn - yarn install 401 error for repository #3093](https://github.com/yarnpkg/yarn/issues/3093)
+* [yarn - yarn install: Couldn't find package "package-name" on the "npm" registry #6029](https://github.com/yarnpkg/yarn/issues/6029)
+* [yarn - Yarn publish command not reading password from .yarnrc #3932](https://github.com/yarnpkg/yarn/issues/3932)
+* [jcansdale-test/yarn-with-gpr workflow](https://github.com/jcansdale-test/yarn-with-gpr/actions/runs/211992068/workflow)
+* [Consume Github Package private registry with yarn](https://github.community/t/consume-github-package-private-registry-with-yarn/12817)
+
+
+  
+
