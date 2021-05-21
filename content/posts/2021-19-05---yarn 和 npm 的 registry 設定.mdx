@@ -14,6 +14,8 @@ socialImage: ""
 
 因為公司是使用 Github 做 Git 管理，就要設定對應的 **registry** 和 **@Owner**，這可真的搞死我一段時間，照理來說，yarn 應該要可以讀得到 .npmrc 才對，但事情好像不是這樣，我就紀錄一下自己發現的問題。
 
+**Personal access tokens (PATs)** 是一個 Github 上可以用來當作使用者身分驗證的 auth token[建立 PATs](https://docs.github.com/en/github/authenticating-to-github/keeping-your-account-and-data-secure/creating-a-personal-access-token)，尤其是當你使用二階段驗證(2FA)時，在一些 Github API 和 command line 的操作，密碼就要換成 PATs 才能驗證成功。
+
 **相關文檔：**
 
 * [github - publishing-nodejs-packages](https://docs.github.com/en/actions/guides/publishing-nodejs-packages)
@@ -73,9 +75,9 @@ yarn config list
 
 ```shell
 ## /Users/liuqq/.npmrc
-//npm.pkg.github.com/:_authToken=<你的 GITHUB_PAT_TOKEN>
-//npm.pkg.github.com/fireqq/:_authToken=<你的 GITHUB_PAT_TOKEN>
-//registry.npmjs.org/:_authToken=<你的 NPM_PAT_TOKEN>
+//npm.pkg.github.com/:_authToken=<你的 GITHUB_PATS>
+//npm.pkg.github.com/fireqq/:_authToken=<你的 GITHUB_PATS>
+//registry.npmjs.org/:_authToken=<你的 NPM_TOKEN>
 @fireqq:registry=https://npm.pkg.github.com/fireqq
 
 
@@ -93,10 +95,10 @@ yarn config list
   ```shell
   # .npmrc
   @fireqq:registry="https://npm.pkg.github.com/fireqq"
-  //npm.pkg.github.com/:_authToken=<你的 GITHUB_PAT_TOKEN>
+  //npm.pkg.github.com/:_authToken=<你的 GITHUB_PATS>
   #or
   @fireqq:registry="https://npm.pkg.github.com/"
-  //npm.pkg.github.com/:_authToken=<你的 GITHUB_PAT_TOKEN>
+  //npm.pkg.github.com/:_authToken=<你的 GITHUB_PATS>
 
   ### 這邊是指當 yarn(npm) 在安裝 npm module 名稱是 `@fireqq/**`開頭時，請使用 github packages 安裝，並指定 npm.pkg.github.com 登入使用 <你的 GITHUB_PAT_TOKEN> 這個 TOKEN 來做登入。
   ```
@@ -118,7 +120,7 @@ yarn add @fireqq/test-publish -D
 但因為 package 是 private 的情形，所以需要帶 token 去做認證，缺少不了下面這一行：
 
 ```shell
-//npm.pkg.github.com/:_authToken=<你的 GITHUB_PAT_TOKEN>
+//npm.pkg.github.com/:_authToken=<你的 GITHUB_PATS>
 ```
 
 在用 npm 安裝時可以順利吃到設定，但是用 yarn 就出問題了!!! 他會狂噴401認證錯誤，我整個就是黑人問號？
@@ -127,18 +129,18 @@ yarn add @fireqq/test-publish -D
 
 ```shell
 ## 原本 .npmrc 內的 token 認證
-//npm.pkg.github.com/:_authToken=<你的 GITHUB_PAT_TOKEN>
+//npm.pkg.github.com/:_authToken=<你的 GITHUB_PATS>
 
 ## 要讓 yarn 可以使用
-//npm.pkg.github.com/:_authToken=<你的 GITHUB_PAT_TOKEN>
-//npm.pkg.github.com/test-publish/:_authToken=<你的 GITHUB_PAT_TOKEN>
-## 'npm.pkg.github.com/test-publish:_authToken=<你的 GITHUB_PAT_TOKEN>' yarn 還抓不到
+//npm.pkg.github.com/:_authToken=<你的 GITHUB_PATS>
+//npm.pkg.github.com/test-publish/:_authToken=<你的 GITHUB_PATS>
+## 'npm.pkg.github.com/test-publish:_authToken=<你的 GITHUB_PATS>' yarn 還抓不到
 
 ## 所以後來看到一種很奇耙的寫法
-//npm.pkg.github.com:_authToken=<你的 GITHUB_PAT_TOKEN>
-//npm.pkg.github.com/:_authToken=<你的 GITHUB_PAT_TOKEN>
-//npm.pkg.github.com/test-publish:_authToken=<你的 GITHUB_PAT_TOKEN>
-//npm.pkg.github.com/test-publish/:_authToken=<你的 GITHUB_PAT_TOKEN>
+//npm.pkg.github.com:_authToken=<你的 GITHUB_PATS>
+//npm.pkg.github.com/:_authToken=<你的 GITHUB_PATS>
+//npm.pkg.github.com/test-publish:_authToken=<你的 GITHUB_PATS>
+//npm.pkg.github.com/test-publish/:_authToken=<你的 GITHUB_PATS>
 
 ## 就只差在一個 / .....
 ```
